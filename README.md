@@ -1,4 +1,4 @@
-# Spatial Omics Image Registration Pipeline
+# McIntire Lab - Spatial Omics Image Registration Pipeline
 
 ## Overview
 This repository contains scripts and documentation for a semi-automatic pipeline to register and integrate spatial omics data from cross-sections of mouse brain. The workflow integrates spatial transcriptomics (*Visium*) and spatial metabolomics (*DESI*), using the *Allen Mouse Brain Atlas* as a reference.
