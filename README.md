@@ -1,101 +1,84 @@
-McIntire Lab - Spatial Omics Image Registration Pipeline
+# McIntire Lab - Spatial Omics Image Registration Pipeline
 
-Overview
-This repository contains scripts and documentation for a semi-automatic pipeline to register and integrate spatial omics data from mouse brain cross-sections. The workflow integrates spatial transcriptomics (Visium) and spatial metabolomics (DESI), using the Allen Mouse Brain Atlas as a spatial reference.
+## Overview
+This repository contains scripts and documentation for a semi-automatic pipeline to register and integrate spatial omics data from mouse brain cross-sections. The workflow integrates spatial transcriptomics (*Visium*) and spatial metabolomics (*DESI*), using the *Allen Mouse Brain Atlas* as a spatial reference.
 
-Workflow Steps
-0. Manual Image Registration
+---
+
+## Workflow Steps
+
+### 0. Manual Image Registration
 Manually register the representative H&E image using:
 
-Filebuilder.bat (QuickNII utility)
+- `Filebuilder.bat` (QuickNII utility)
+- `QuickNII`
+- `VisuAlign`
 
-QuickNII
+### 1. Visium Data Preprocessing & Registration
+Scripts:
+- `spatial registration/Visium_registration.ipynb`
+- `spatial registration/visium_st_seurat_updated.R`
 
-VisuAlign
+### 2. DESI Data Preprocessing & Registration
+Scripts:
+- `spatial registration/DESI_registration.ipynb`
+- `spatial registration/DESI_processing.r`
+- `spatial registration/convert_desi_ion_to_matrix.ipynb`
 
-1. Visium Data Preprocessing & Registration
-Scripts/notebooks:
+### 3. Spot-to-Region Label Mapping
+- `Spots2Labels.ipynb`
+- (optional compact version: `spatial registration/Spots2Labels_compact_workflow_do_not_run.ipynb`)
 
-spatial registration/Visium_registration.ipynb
+---
 
-spatial registration/visium_st_seurat_updated.R
+## Spatial Registration Pipeline
 
-2. DESI Data Preprocessing & Registration
-Scripts/notebooks:
+### 1. Image Preprocessing
+- Select a representative H&E image (preferably from Visium).
+- Resize it to ~16 MP resolution for compatibility with *QuickNII*.
+- Use `Filebuilder.bat` to prepare input.
+- Align Allen Mouse Brain Atlas slice to the H&E image in *QuickNII*.
+- Export `.xml`, load into *VisuAlign*, and perform non-linear warping.
+- Export atlas-based region maps.
 
-spatial registration/DESI_registration.ipynb
+### 2. Visium Data Preprocessing
+- Import Visium data using *Seurat*.
+- If applicable, split slides into two regions.
+- Adjust image size and coordinate system accordingly.
 
-spatial registration/DESI_processing.r
+### 3. Landmark Selection
+- In R, select consistent anatomical landmarks in both H&E and atlas maps.
+- Recommend fewer than 24 points, covering borders and hippocampal region.
+- Save coordinates to tabular format.
 
-spatial registration/convert_desi_ion_to_matrix.ipynb
+### 4. First Spatial Registration
+- Load landmarks and images in Python using `cv2`.
+- Align reference image to each brain section using `cv2.findHomography`.
+- Overlay and assign pixel-level region annotations.
+- Export resulting tables with pixel-region assignments.
 
-3. Spot Label Mapping
-Spots2Labels.ipynb
+### 5. DESI Ion Data Preprocessing
+- Convert DESI ion data to a tabular matrix.
+- Select a control ion feature to reconstruct tissue-like image.
+- Create pseudo-image using x/y coordinates and intensity values.
 
-or compact version (not recommended for execution):
-spatial registration/Spots2Labels_compact_workflow_do_not_run.ipynb
+### 6. Landmarking on DESI
+- Identify and annotate anatomical landmarks in DESI pseudo-images.
+- Align DESI coordinate system to that of Visium data.
 
-Spatial Registration Pipeline
-1. Image Preprocessing
-Select a representative H&E image.
+### 7. Second Spatial Registration
+- Use Python (`cv2`) to align DESI images to Visium sections.
+- Link Visium spot coordinates to DESI-derived signals.
 
-Resize it (~16 MP) per QuickNII guidelines.
+### 8. Integration & Downstream Analysis
+- Merge Visium and DESI data by spatial location.
+- Normalize and clean datasets.
+- Proceed with multi-omic analysis such as clustering, differential analysis, or pathway enrichment.
 
-Use Filebuilder.bat to format the image for QuickNII.
+---
 
-Align the Allen Mouse Brain Atlas to the H&E image in QuickNII.
+## Repository Structure
 
-Export .xml and load in VisuAlign.
-
-Perform fine non-linear alignment and export atlas maps.
-
-2. Visium Data Preprocessing
-Load Visium data using Seurat.
-
-If a slide contains two tissue sections, split accordingly.
-
-Adjust high-res images and coordinate system for each section.
-
-3. Image Landmarking
-Use R to manually select anatomical landmarks in H&E and atlas images.
-
-Recommended: <24 landmarks, mostly along the brain border and hippocampus.
-
-Save as a coordinate table.
-
-4. First Spatial Registration
-Load landmarks and images using Python (cv2).
-
-Use cv2.findHomography to align reference image to each brain section.
-
-Overlay atlas to assign annotations and export annotated pixels.
-
-5. Ion Data Preprocessing (DESI)
-Convert raw DESI ion data to tabular format.
-
-Identify metabolite features that resemble cortical structure.
-
-Reconstruct tissue image using x/y coordinates and feature intensities.
-
-6. Secondary Modality Alignment (DESI to Visium)
-Identify landmarks in reconstructed DESI images.
-
-Align the DESI coordinate system to the Visium space.
-
-7. Second Spatial Registration
-Register DESI images to Visium sections using Python (homography).
-
-Map DESI feature data onto each Visium spot.
-
-8. Integration
-Merge transcriptomic (Visium) and metabolomic (DESI) data.
-
-Perform normalization, quality control, and downstream multi-omics analysis.
-
-Repository Structure
-plaintext
-Copy
-Edit
 /
 ├── Proj01/
 │   ├── Integration of spatial modalities in brain tissue.pptx
@@ -113,33 +96,42 @@ Edit
 ├── ST_pipeline-Visium.ipynb
 ├── visium_st_seurat.R
 └── README.md
-Requirements
-R:
-Seurat, ggplot2, dplyr, sp, etc.
 
-Python:
-opencv-python (cv2), numpy, pandas, matplotlib
 
-Tools:
+---
 
-QuickNII
+## Requirements
 
-VisuAlign
+- **R**:  
+  `Seurat`, `ggplot2`, `dplyr`, `sp`, `magick`, etc.
 
-Allen Mouse Brain Atlas reference files
+- **Python**:  
+  `opencv-python`, `numpy`, `pandas`, `matplotlib`
 
-Usage
-Manual alignment of H&E images using QuickNII and VisuAlign.
+- **Tools**:  
+  - [QuickNII](https://www.nitrc.org/projects/quicknii/)
+  - [VisuAlign](https://www.nitrc.org/projects/visualign/)
+  - Allen Mouse Brain Atlas
 
-Run Visium preprocessing using R and Python scripts in the spatial registration/ folder.
+---
 
-Run DESI preprocessing, reconstruct DESI images, and landmark.
+## How to Run
 
-Perform spatial alignment and export annotations for downstream multi-modal integration.
+1. Perform manual registration of the H&E image using QuickNII + VisuAlign.
+2. Run Visium preprocessing and registration notebooks.
+3. Process DESI data and generate pseudo-H&E images.
+4. Perform spatial registration using landmark alignment.
+5. Integrate Visium and DESI data and proceed to analysis.
 
-License
+---
+
+## License
+
 MIT License
 
-Contact
-For questions or collaborations, please open an issue or contact the McIntire Lab.
+---
+
+## Contact
+
+For questions or collaborations, please reach out to the McIntire Lab or open an issue.
 
