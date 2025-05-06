@@ -75,30 +75,27 @@ Scripts:
 - Normalize and clean datasets.
 - Proceed with multi-omic analysis such as clustering, differential analysis, or pathway enrichment.
 
----
-
 ## Repository Structure
 
-/
-├── Proj01/
-│   ├── Integration of spatial modalities in brain tissue.pptx
-│   └── VizDezI/
-├── spatial registration/
-│   ├── convert_desi_ion_to_matrix.ipynb
-│   ├── DESI_processing.r
-│   ├── DESI_registration.ipynb
-│   ├── visium_st_seurat_updated.R
-│   ├── Visium_registration.ipynb
-│   └── Spots2Labels_compact_workflow_do_not_run.ipynb
+```plaintext
+D:\William\Spatial_Registration\
 ├── DESI_processing.r
 ├── Spots2Labels.ipynb
 ├── ST_pipeline-DESI-Regions.ipynb
 ├── ST_pipeline-Visium.ipynb
 ├── visium_st_seurat.R
-└── README.md
+├── Proj01/
+│   ├── Integration of spatial modalities in brain tissue.pptx
+│   └── VizDezI/
+└── spatial registration/
+    ├── convert_desi_ion_to_matrix.ipynb
+    ├── DESI_processing.r
+    ├── DESI_registration.ipynb
+    ├── README.txt
+    ├── Spots2Labels_compact_workflow_do_not_run.ipynb
+    ├── Visium_registration.ipynb
+    └── visium_st_seurat_updated.R
 
-
----
 
 ## Requirements
 
