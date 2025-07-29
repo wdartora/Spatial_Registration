@@ -121,12 +121,9 @@ MPI_Registration/
 - `Seurat`
 - `ggplot2`
 - `dplyr`
-- `sp`
-- `magick`
-- etc.
+- `WGCNA`
 
 ### Python:
-- `opencv-python`
 - `numpy`
 - `pandas`
 - `matplotlib`
@@ -139,7 +136,6 @@ MPI_Registration/
 ---
 
 ## How to Run
-
 1. Perform manual registration of the H&E image using **QuickNII** + **VisuAlign**.
 2. Run Visium preprocessing and registration scripts (`01` to `04`).
 3. Process DESI data and generate pseudo-H&E images (`05` to `08`).
@@ -149,11 +145,9 @@ MPI_Registration/
 ---
 
 ## License
-
 MIT License
 
 ---
 
 ## Contact
-
 For questions or collaborations, please reach out to the **McIntire Lab** or open an issue.
