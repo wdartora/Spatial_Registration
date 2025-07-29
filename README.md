@@ -4,7 +4,7 @@
 This repository contains scripts and documentation for a semi-automatic pipeline to register and integrate spatial omics data from mouse brain cross-sections. The workflow integrates spatial transcriptomics (*Visium*) and spatial metabolomics (*DESI*), using the *Allen Mouse Brain Atlas* as a spatial reference.
 
 
-![Landmark-based spatial registration](figures/registration_landmark_example.png)
+![Landmark-based spatial registration](figures/registration_landmark_example1.png)
 ---
 
 ## Workflow Steps
